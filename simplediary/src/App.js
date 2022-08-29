@@ -7,8 +7,9 @@ import { getItem, setItem } from './localStorage';
 const STORAGE_KEY = 'diaryData';
 
 function App() {
-  const [data, setData] = useState(getItem('diaryData') || []);
-  const dataId = useRef(0);
+  const localStorageData = getItem('diaryData');
+  const [data, setData] = useState(localStorageData || []);
+  const dataId = useRef(new Date().getTime());
 
   const onCreate = (author, contents, emotion) => {
     const createdDate = new Date().getTime();
@@ -18,16 +19,21 @@ function App() {
     setData([newItem, ...data]);
   };
 
-  const onDelete = id => {
+  const onRemove = id => {
     const newItem = data.filter(diary => diary.id !== id);
     setItem(STORAGE_KEY, newItem);
     setData(newItem);
   };
 
+  const onEdit = (id, newContents) => {
+    const newItem = data.map(diary => (diary.id === id ? { ...diary, contents: newContents } : diary));
+    setItem(STORAGE_KEY, newItem);
+    setData(newItem);
+  };
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList data={data} onDelete={onDelete} />
+      <DiaryList data={data} onRemove={onRemove} onEdit={onEdit} />
     </div>
   );
 }

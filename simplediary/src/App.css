@@ -56,15 +56,31 @@ textarea {
 
 .DiaryItem .info {
   border-bottom: 1px solid gray;
-  margin-bottom: 10px;
   padding-bottom: 10px;
 }
 
 .DiaryItem .date {
+  margin-top: 10px;
   color: gray;
+}
+
+.DiaryItem button {
+  margin-right: 10px;
 }
 
 .DiaryItem .contents {
   font-weight: bold;
   margin: 30px 0 30px 0;
+}
+
+.contents p{
+  color: red;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.contents textarea {
+  width: 500px;
+  padding: 10px;
+  resize: none;
 }
