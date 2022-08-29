@@ -2,10 +2,10 @@
   border: 1px solid grey;
   text-align: center;
   padding: 20px;
-  }
+}
 
-.DiaryEditor input, textarea {
-  margin-bottom: 20px;
+.DiaryEditor input,
+textarea {
   width: 500px;
   padding: 10px;
 }
@@ -16,7 +16,7 @@
 }
 
 .DiaryEditor select {
-  width: 50px;
+  width: 80px;
   margin-bottom: 20px;
   padding: 10px;
 }
@@ -25,6 +25,12 @@
   width: 500px;
   padding: 10px;
   cursor: pointer;
+}
+
+.DiaryEditor p {
+  color: red;
+  margin-top: 6px;
+  font-size: 14px;
 }
 
 .DiaryList {
@@ -43,8 +49,9 @@
 }
 
 .DiaryItem {
-  background: rgb(240,240,240);
+  background: rgb(240, 240, 240);
   padding: 20px;
+  margin-bottom: 10px;
 }
 
 .DiaryItem .info {
