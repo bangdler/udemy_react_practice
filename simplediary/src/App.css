@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .DiaryEditor {
   border: 1px solid grey;
   text-align: center;
@@ -18,7 +22,8 @@ textarea {
 .DiaryEditor select {
   width: 80px;
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 4px;
+  font-size: 18px;
 }
 
 .DiaryEditor button {
@@ -76,9 +81,11 @@ textarea {
 .DiaryItem input {
   margin-right: 10px;
   padding: 4px;
+  height: 35px;
 }
 .DiaryItem select {
   padding: 4px;
+  font-size: 18px;
 }
 
 .DiaryItem p{

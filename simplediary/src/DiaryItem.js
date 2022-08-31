@@ -67,7 +67,7 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
               </select>
             </>
           ) : (
-            `작성자: ${author} | 감정 점수: ${emotion}점`
+            `작성자: ${author} ⎜ 감정: ${emotion}`
           )}
         </span>
         <p>{inputCheck ? '' : '1글자 이상 입력해주세요!'}</p>
