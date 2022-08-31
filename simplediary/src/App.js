@@ -1,14 +1,43 @@
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getItem, setItem } from './localStorage';
 import { STORAGE_KEY } from './constants';
 
 function App() {
   const localStorageData = getItem('diaryData');
-  const [data, setData] = useState(localStorageData || []);
+  const [data, setData] = useState([]);
   const dataId = useRef(new Date().getTime());
+
+  const getInitData = async () => {
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/comments');
+      if (response.ok) {
+        const jsonData = await response.json();
+        const initData = jsonData.slice(0, 3).map(it => ({
+          author: it.email,
+          contents: it.body,
+          emotion: '🤣',
+          createdDate: dataId.current,
+          id: dataId.current--,
+        }));
+        setItem(STORAGE_KEY, initData);
+        setData(initData);
+        return;
+      }
+      throw new Error('API 통신 에러');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (localStorageData) {
+      return setData(localStorageData);
+    }
+    getInitData();
+  }, []);
 
   const onCreate = (author, contents, emotion) => {
     const createdDate = new Date().getTime();
