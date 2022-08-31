@@ -1,21 +1,31 @@
 import { useRef, useState } from 'react';
+import { emotionNumbers } from './constants';
 
 const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdit }) => {
-  const [isEditContents, setIsEditContents] = useState(false);
-  const [isEditInfo, setIsEditInfo] = useState(false);
-  const [localContents, setLocalContents] = useState(contents);
+  const [isEdit, setIsEdit] = useState(false);
+  const [localState, setLocalState] = useState({ author, contents, emotion });
+  const [textareaCheck, setTextareaCheck] = useState(true);
   const [inputCheck, setInputCheck] = useState(true);
   const localContentsInput = useRef();
+  const localAuthorInput = useRef();
 
-  const toggleIsEdit = () => setIsEditContents(!isEditContents);
+  const toggleIsEdit = () => setIsEdit(!isEdit);
 
-  const handleChange = ({ target }) => {
-    setLocalContents(target.value);
+  const handleInputChange = ({ target }) => {
+    setLocalState(prev => ({ ...prev, author: target.value }));
     setInputCheck(true);
   };
+  const handleTextareaChange = ({ target }) => {
+    setLocalState(prev => ({ ...prev, contents: target.value }));
+    setTextareaCheck(true);
+  };
+
+  const handleEmotionChange = ({ target }) => {
+    setLocalState(prev => ({ ...prev, emotion: target.value }));
+  };
   const handleQuitEdit = () => {
-    setIsEditContents(false);
-    setLocalContents(contents);
+    setIsEdit(false);
+    setLocalState({ author, contents, emotion });
   };
 
   const handleRemove = () => {
@@ -25,13 +35,19 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
   };
 
   const handleEdit = () => {
-    if (localContents.length < 5) {
+    if (localState.contents.length < 5) {
       localContentsInput.current.focus();
+      setTextareaCheck(false);
+    }
+    if (localState.author.length < 1) {
+      localAuthorInput.current.focus();
       setInputCheck(false);
     }
-    if (window.confirm(`해당 일기를 수정하시겠습니까?`)) {
-      onEdit(id, localContents);
-      toggleIsEdit();
+    if (localState.author.length >= 1 && localState.contents.length >= 5) {
+      if (window.confirm(`해당 일기를 수정하시겠습니까?`)) {
+        onEdit(id, { newAuthor: localState.author, newContents: localState.contents, newEmotion: localState.emotion });
+        toggleIsEdit();
+      }
     }
   };
 
@@ -39,20 +55,34 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
     <div className="DiaryItem">
       <div className="info">
         <span>
-          작성자: {author} | 감정 점수: {emotion}점
+          {isEdit ? (
+            <>
+              <input ref={localAuthorInput} value={localState.author} onChange={handleInputChange} />
+              <select onChange={handleEmotionChange} value={localState.emotion}>
+                {emotionNumbers.map((num, idx) => (
+                  <option key={idx} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+            </>
+          ) : (
+            `작성자: ${author} | 감정 점수: ${emotion}점`
+          )}
         </span>
+        <p>{inputCheck ? '' : '1글자 이상 입력해주세요!'}</p>
         <div className="date">작성일자: {new Date(createdDate).toLocaleDateString()}</div>
       </div>
       <div className="contents">
-        {isEditContents ? (
-          <textarea ref={localContentsInput} onChange={handleChange} value={localContents} />
+        {isEdit ? (
+          <textarea ref={localContentsInput} onChange={handleTextareaChange} value={localState.contents} />
         ) : (
           contents
         )}
-        <p>{inputCheck ? '' : '5글자 이상 입력해주세요!'}</p>
+        <p>{textareaCheck ? '' : '5글자 이상 입력해주세요!'}</p>
       </div>
 
-      {isEditContents ? (
+      {isEdit ? (
         <>
           <button onClick={handleQuitEdit}>취소</button>
           <button onClick={handleEdit}>완료</button>

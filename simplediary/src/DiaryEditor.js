@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { emotionNumbers } from './constants';
 
 const DiaryEditor = ({ onCreate }) => {
   const [state, setState] = useState({ author: '', contents: '', emotion: 1 });
@@ -16,13 +17,13 @@ const DiaryEditor = ({ onCreate }) => {
   };
 
   const handleSubmit = () => {
-    if (state.author.length < 1) {
-      authorInput.current.focus();
-      setInputCheck(prev => ({ ...prev, input: false }));
-    }
     if (state.contents.length < 5) {
       contentsInput.current.focus();
       setInputCheck(prev => ({ ...prev, textarea: false }));
+    }
+    if (state.author.length < 1) {
+      authorInput.current.focus();
+      setInputCheck(prev => ({ ...prev, input: false }));
     }
     if (state.author.length >= 1 && state.contents.length >= 5) {
       onCreate(state.author, state.contents, state.emotion);
@@ -30,8 +31,6 @@ const DiaryEditor = ({ onCreate }) => {
       alert('저장');
     }
   };
-
-  const emotionNumbers = [1, 2, 3, 4, 5];
 
   return (
     <div className="DiaryEditor">

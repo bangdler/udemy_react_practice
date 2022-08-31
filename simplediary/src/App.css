@@ -73,7 +73,15 @@ textarea {
   margin: 30px 0 30px 0;
 }
 
-.contents p{
+.DiaryItem input {
+  margin-right: 10px;
+  padding: 4px;
+}
+.DiaryItem select {
+  padding: 4px;
+}
+
+.DiaryItem p{
   color: red;
   margin-top: 6px;
   font-size: 14px;

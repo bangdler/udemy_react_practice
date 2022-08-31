@@ -3,8 +3,7 @@ import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 import { useRef, useState } from 'react';
 import { getItem, setItem } from './localStorage';
-
-const STORAGE_KEY = 'diaryData';
+import { STORAGE_KEY } from './constants';
 
 function App() {
   const localStorageData = getItem('diaryData');
@@ -25,8 +24,10 @@ function App() {
     setData(newItem);
   };
 
-  const onEdit = (id, newContents) => {
-    const newItem = data.map(diary => (diary.id === id ? { ...diary, contents: newContents } : diary));
+  const onEdit = (id, { newAuthor, newContents, newEmotion }) => {
+    const newItem = data.map(diary =>
+      diary.id === id ? { ...diary, author: newAuthor, contents: newContents, emotion: newEmotion } : diary,
+    );
     setItem(STORAGE_KEY, newItem);
     setData(newItem);
   };
