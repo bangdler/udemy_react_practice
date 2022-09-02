@@ -1,7 +1,7 @@
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getItem, setItem } from './localStorage';
 import { STORAGE_KEY } from './constants';
 import { getData } from './utils';
@@ -20,7 +20,6 @@ function App() {
       createdDate: dataId.current,
       id: dataId.current--,
     }));
-    setItem(STORAGE_KEY, initData);
     setData(initData);
   };
 
@@ -31,27 +30,28 @@ function App() {
     getInitData();
   }, []);
 
-  const onCreate = (author, contents, emotion) => {
+  useEffect(() => {
+    setItem(STORAGE_KEY, data);
+  }, [data]);
+
+  const onCreate = useCallback((author, contents, emotion) => {
     const createdDate = new Date().getTime();
     const newItem = { author, contents, emotion, createdDate, id: dataId.current };
     dataId.current++;
-    setItem(STORAGE_KEY, [newItem, ...data]);
-    setData([newItem, ...data]);
-  };
+    setData(prev => [newItem, ...prev]); // deps 를 [] 로 하면 data 가 초기값으로 고정되므로 이전 값을 참조하는 방식을 사용해야함.
+  }, []);
 
-  const onRemove = id => {
-    const newItem = data.filter(diary => diary.id !== id);
-    setItem(STORAGE_KEY, newItem);
-    setData(newItem);
-  };
+  const onRemove = useCallback(id => {
+    setData(prev => prev.filter(diary => diary.id !== id));
+  }, []);
 
-  const onEdit = (id, { newAuthor, newContents, newEmotion }) => {
-    const newItem = data.map(diary =>
-      diary.id === id ? { ...diary, author: newAuthor, contents: newContents, emotion: newEmotion } : diary,
+  const onEdit = useCallback((id, { newAuthor, newContents, newEmotion }) => {
+    setData(prev =>
+      prev.map(diary =>
+        diary.id === id ? { ...diary, author: newAuthor, contents: newContents, emotion: newEmotion } : diary,
+      ),
     );
-    setItem(STORAGE_KEY, newItem);
-    setData(newItem);
-  };
+  }, []);
 
   return (
     <div className="App">

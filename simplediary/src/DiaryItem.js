@@ -9,8 +9,6 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
   const localContentsInput = useRef();
   const localAuthorInput = useRef();
 
-  useEffect(() => console.log('item render', id));
-
   const toggleIsEdit = () => setIsEdit(!isEdit);
 
   const handleInputChange = ({ target }) => {
@@ -99,9 +97,8 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
   );
 };
 
-const areEqual = (prevProps, nextProps) => {
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-};
+// 이렇게 전달 시 useCallback을 안써도 함수로 인한 리렌더링은 발생하지 않지만, useState(data) 에 포함된 data가 고정되는 문제가 있는 것 같다.
+// useState(prev => prev변경) 을 사용하면 될 듯?
+const areEqual = (prevProps, nextProps) => JSON.stringify(prevProps) === JSON.stringify(nextProps);
 
-export const MemoizedDiaryItem = React.memo(DiaryItem, areEqual);
-// 함수 외부에서 별도로 선언해줘야 함.
+export default React.memo(DiaryItem);
