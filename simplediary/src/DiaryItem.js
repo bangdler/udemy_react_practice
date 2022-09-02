@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { emotionNumbers } from './constants';
+import React, { useEffect, useRef, useState } from 'react';
+import { emotions } from './constants';
 
 const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdit }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -8,6 +8,8 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
   const [inputCheck, setInputCheck] = useState(true);
   const localContentsInput = useRef();
   const localAuthorInput = useRef();
+
+  useEffect(() => console.log('item render', id));
 
   const toggleIsEdit = () => setIsEdit(!isEdit);
 
@@ -59,9 +61,9 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
             <>
               <input ref={localAuthorInput} value={localState.author} onChange={handleInputChange} />
               <select onChange={handleEmotionChange} value={localState.emotion}>
-                {emotionNumbers.map((num, idx) => (
-                  <option key={idx} value={num}>
-                    {num}
+                {emotions.map(emotion => (
+                  <option key={emotion} value={emotion}>
+                    {emotion}
                   </option>
                 ))}
               </select>
@@ -97,4 +99,9 @@ const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdi
   );
 };
 
-export default DiaryItem;
+const areEqual = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+};
+
+export const MemoizedDiaryItem = React.memo(DiaryItem, areEqual);
+// 함수 외부에서 별도로 선언해줘야 함.

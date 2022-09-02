@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import { emotionNumbers } from './constants';
+import { emotions } from './constants';
 
 const DiaryEditor = ({ onCreate }) => {
-  const [state, setState] = useState({ author: '', contents: '', emotion: 1 });
+  const [state, setState] = useState({ author: '', contents: '', emotion: emotions[0] });
   const [inputCheck, setInputCheck] = useState({ input: true, textarea: true });
   const authorInput = useRef();
   const contentsInput = useRef();
@@ -27,7 +27,7 @@ const DiaryEditor = ({ onCreate }) => {
     }
     if (state.author.length >= 1 && state.contents.length >= 5) {
       onCreate(state.author, state.contents, state.emotion);
-      setState({ author: '', contents: '', emotion: 1 });
+      setState({ author: '', contents: '', emotion: emotions[0] });
       alert('저장');
     }
   };
@@ -58,9 +58,9 @@ const DiaryEditor = ({ onCreate }) => {
       <div>
         <span>오늘의 감정 점수 : </span>
         <select name="emotion" onChange={handleChange} value={state.emotion}>
-          {emotionNumbers.map((num, idx) => (
-            <option key={idx} value={num}>
-              {num}
+          {emotions.map((emotion, idx) => (
+            <option key={emotion} value={emotion}>
+              {emotion}
             </option>
           ))}
         </select>
