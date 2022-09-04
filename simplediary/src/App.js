@@ -1,14 +1,15 @@
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { getItem, setItem } from './localStorage';
 import { STORAGE_KEY } from './constants';
 import { getData } from './utils';
+import { diaryDataReducer } from './diaryDataReducer';
 
 function App() {
   const localStorageData = getItem('diaryData');
-  const [data, setData] = useState([]);
+  const [data, dispatch] = useReducer(diaryDataReducer, []);
   const dataId = useRef(new Date().getTime());
 
   const getInitData = async () => {
@@ -20,13 +21,11 @@ function App() {
       createdDate: dataId.current,
       id: dataId.current--,
     }));
-    setData(initData);
+    dispatch({ type: 'SET', data: initData });
   };
 
   useEffect(() => {
-    if (localStorageData) {
-      return setData(localStorageData);
-    }
+    if (localStorageData) return dispatch({ type: 'SET', data: localStorageData });
     getInitData();
   }, []);
 
@@ -34,23 +33,26 @@ function App() {
     setItem(STORAGE_KEY, data);
   }, [data]);
 
+  // useState 사용 시
+  // const onCreate = useCallback((author, contents, emotion) => {
+  //   const createdDate = new Date().getTime();
+  //   const newItem = { author, contents, emotion, createdDate, id: dataId.current };
+  //   dataId.current++;
+  //   setData(prev => [newItem, ...prev]); // deps 를 [] 로 하면 data 가 초기값으로 고정되므로 이전 값을 참조하는 방식을 사용해야함.
+  // }, []);
+
   const onCreate = useCallback((author, contents, emotion) => {
     const createdDate = new Date().getTime();
-    const newItem = { author, contents, emotion, createdDate, id: dataId.current };
+    dispatch({ type: 'CREATE', data: { author, contents, emotion, createdDate, id: dataId.current } });
     dataId.current++;
-    setData(prev => [newItem, ...prev]); // deps 를 [] 로 하면 data 가 초기값으로 고정되므로 이전 값을 참조하는 방식을 사용해야함.
   }, []);
 
-  const onRemove = useCallback(id => {
-    setData(prev => prev.filter(diary => diary.id !== id));
+  const onRemove = useCallback(targetId => {
+    dispatch({ type: 'REMOVE', targetId });
   }, []);
 
-  const onEdit = useCallback((id, { newAuthor, newContents, newEmotion }) => {
-    setData(prev =>
-      prev.map(diary =>
-        diary.id === id ? { ...diary, author: newAuthor, contents: newContents, emotion: newEmotion } : diary,
-      ),
-    );
+  const onEdit = useCallback((targetId, { newAuthor, newContents, newEmotion }) => {
+    dispatch({ type: 'EDIT', targetId, data: { newAuthor, newContents, newEmotion } });
   }, []);
 
   return (

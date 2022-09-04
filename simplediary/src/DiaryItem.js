@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { emotions } from './constants';
 
 const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdit }) => {
