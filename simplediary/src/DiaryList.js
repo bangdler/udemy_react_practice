@@ -2,7 +2,7 @@ import DiaryItem from './DiaryItem';
 import React, { useContext, useMemo } from 'react';
 import { DiaryStateContext } from './diaryContext';
 
-const DiaryList = ({ onRemove, onEdit }) => {
+const DiaryList = () => {
   const data = useContext(DiaryStateContext);
 
   const getRecent2daysDiary = useMemo(() => {
@@ -21,9 +21,7 @@ const DiaryList = ({ onRemove, onEdit }) => {
       <div className="DiaryListContainer">
         <h4>{data.length}개의 일기가 있습니다.</h4>
         <h4>최근 2일 간 작성한 일기 개수 : {getRecent2daysDiary}</h4>
-        {data.map(diary => (
-          <DiaryItem key={diary.id} onRemove={onRemove} onEdit={onEdit} {...diary} />
-        ))}
+        {data.length ? data.map(diary => <DiaryItem key={diary.id} {...diary} />) : ''}
       </div>
     </div>
   );
