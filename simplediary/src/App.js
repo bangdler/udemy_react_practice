@@ -1,11 +1,12 @@
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-import { useCallback, useEffect, useReducer, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { getItem, setItem } from './localStorage';
 import { STORAGE_KEY } from './constants';
 import { getData } from './utils';
 import { diaryDataReducer } from './diaryDataReducer';
+import { DiaryDispatchContext, DiaryStateContext } from './diaryContext';
 
 function App() {
   const localStorageData = getItem('diaryData');
@@ -55,11 +56,19 @@ function App() {
     dispatch({ type: 'EDIT', targetId, data: { newAuthor, newContents, newEmotion } });
   }, []);
 
+  const memoizedDispatches = useMemo(() => {
+    return { onCreate, onRemove, onEdit };
+  }, []);
+
   return (
-    <div className="App">
-      <DiaryEditor onCreate={onCreate} />
-      <DiaryList data={data} onRemove={onRemove} onEdit={onEdit} />
-    </div>
+    <DiaryStateContext.Provider value={data}>
+      <DiaryDispatchContext.Provider value={memoizedDispatches}>
+        <div className="App">
+          <DiaryEditor />
+          <DiaryList />
+        </div>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 }
 

@@ -1,7 +1,10 @@
 import DiaryItem from './DiaryItem';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
+import { DiaryStateContext } from './diaryContext';
 
-const DiaryList = ({ data, onRemove, onEdit }) => {
+const DiaryList = ({ onRemove, onEdit }) => {
+  const data = useContext(DiaryStateContext);
+
   const getRecent2daysDiary = useMemo(() => {
     const today = new Date().setHours(0, 0, 0, 0);
     const numOfRecentDiary = data.filter(it => {

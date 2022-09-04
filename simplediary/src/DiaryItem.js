@@ -1,7 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { emotions } from './constants';
+import { DiaryDispatchContext } from './diaryContext';
 
-const DiaryItem = ({ id, author, contents, emotion, createdDate, onRemove, onEdit }) => {
+const DiaryItem = ({ id, author, contents, emotion, createdDate }) => {
+  const { onRemove, onEdit } = useContext(DiaryDispatchContext);
   const [isEdit, setIsEdit] = useState(false);
   const [localState, setLocalState] = useState({ author, contents, emotion });
   const [textareaCheck, setTextareaCheck] = useState(true);

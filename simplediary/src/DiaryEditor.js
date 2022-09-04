@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { emotions } from './constants';
+import { DiaryDispatchContext } from './diaryContext';
 
-const DiaryEditor = ({ onCreate }) => {
+const DiaryEditor = () => {
+  const { onCreate } = useContext(DiaryDispatchContext);
   const [state, setState] = useState({ author: '', contents: '', emotion: emotions[0] });
   const [inputCheck, setInputCheck] = useState({ input: true, textarea: true });
   const authorInput = useRef();
