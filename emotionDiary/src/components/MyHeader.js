@@ -1,4 +1,4 @@
-export default function Myheader({ headText, leftChild, rightChild }) {
+export default function MyHeader({ headText, leftChild, rightChild }) {
   return (
     <header>
       <div className="head_left">{leftChild}</div>
