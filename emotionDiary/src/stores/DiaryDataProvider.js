@@ -1,7 +1,10 @@
-import React, { useCallback, useMemo, useReducer } from 'react';
+import React, { useCallback, useMemo, useReducer, useEffect } from 'react';
+import { getData } from 'utils/api';
+import { getItem, setItem } from 'utils/localStorage';
+import { STORAGE_KEY } from 'utils/constants';
 
-const DiaryDataContext = React.createContext();
-const DiaryDispatchContext = React.createContext();
+export const DiaryDataContext = React.createContext();
+export const DiaryDispatchContext = React.createContext();
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -19,7 +22,28 @@ const reducer = (state, action) => {
 };
 
 export default function DiaryDataProvider({ children }) {
+  const localStorageData = getItem(STORAGE_KEY);
   const [data, dispatch] = useReducer(reducer, []);
+
+  const getInitData = async () => {
+    const rawData = await getData('https://jsonplaceholder.typicode.com/comments');
+    const initData = rawData.slice(0, 3).map((it, idx) => ({
+      contents: it.body,
+      emotion: '🤣',
+      date: new Date().getTime() + idx,
+      id: it.email,
+    }));
+    dispatch({ type: 'SET', data: initData });
+  };
+
+  useEffect(() => {
+    if (localStorageData) return dispatch({ type: 'SET', data: localStorageData });
+    getInitData();
+  }, []);
+
+  useEffect(() => {
+    setItem(STORAGE_KEY, data);
+  }, [data]);
 
   const onCreate = useCallback(({ date, contents, emotion }) => {
     const curTime = new Date(date).getTime();
