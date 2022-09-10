@@ -3,6 +3,7 @@ import MyButton from 'components/MyButton';
 import { useContext, useEffect, useState } from 'react';
 import { DiaryDataContext } from 'stores/DiaryDataProvider';
 import DiaryList from '../components/DiaryList';
+import SortedDiaryProvider from '../stores/SortedDiaryProvider';
 
 export default function Home() {
   const diaryList = useContext(DiaryDataContext);
@@ -32,7 +33,9 @@ export default function Home() {
         leftChild={<MyButton text={'<'} onClick={decreaseMonth} />}
         rightChild={<MyButton text={'>'} onClick={increaseMonth} />}
       />
-      <DiaryList diaryList={curMonthDiaryList} />
+      <SortedDiaryProvider curMonthDiaryList={curMonthDiaryList}>
+        <DiaryList />
+      </SortedDiaryProvider>
     </>
   );
 }
