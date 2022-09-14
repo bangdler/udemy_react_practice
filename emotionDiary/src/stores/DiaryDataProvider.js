@@ -31,7 +31,7 @@ export default function DiaryDataProvider({ children }) {
       contents: it.body,
       emotion: 3 + idx,
       date: new Date().getTime() + idx,
-      id: it.email,
+      id: idx + 1,
     }));
     dispatch({ type: 'SET', data: initData });
   };

@@ -1,8 +1,9 @@
 import { useContext } from 'react';
-import ControlMenu from 'components/ControlMenu';
-import { SortedDiaryContext } from 'stores/SortedDiaryProvider';
-import MyButton from './MyButton';
 import { useNavigate } from 'react-router-dom';
+import { SortedDiaryContext } from 'stores/SortedDiaryProvider';
+import ControlMenu from 'components/ControlMenu';
+import MyButton from 'components/MyButton';
+import DiaryItem from 'components/DiaryItem';
 
 const sortTimeOptionList = [
   { value: 'LATEST', name: '최신순' },
@@ -32,7 +33,7 @@ export default function DiaryList() {
       </div>
       <div>
         {sortedDiaryList.map(it => (
-          <div key={it.id}>{it.contents}</div>
+          <DiaryItem key={it.id} {...it} />
         ))}
       </div>
     </div>
