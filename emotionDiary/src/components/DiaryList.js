@@ -1,11 +1,16 @@
 import { useContext, useState } from 'react';
 import ControlMenu from 'components/ControlMenu';
-import { LATEST, OLDEST } from 'utils/constants';
 import { SortedDiaryContext } from 'stores/SortedDiaryProvider';
 
-const sortOptionList = [
-  { value: LATEST, name: '최신순' },
-  { value: OLDEST, name: '오래된순' },
+const sortTimeOptionList = [
+  { value: 'LATEST', name: '최신순' },
+  { value: 'OLDEST', name: '오래된순' },
+];
+
+const sortEmotionOptionList = [
+  { value: 'ALL', name: '전부다' },
+  { value: 'GOOD', name: '좋은 감정만' },
+  { value: 'BAD', name: '나쁜 감정만' },
 ];
 
 export default function DiaryList() {
@@ -28,7 +33,8 @@ export default function DiaryList() {
 
   return (
     <>
-      <ControlMenu OptionList={sortOptionList} />
+      <ControlMenu initialSelectedValue={'LATEST'} OptionList={sortTimeOptionList} />
+      <ControlMenu initialSelectedValue={'ALL'} OptionList={sortEmotionOptionList} />
       <div>
         {sortedDiaryList.map(it => (
           <div key={it.id}>{it.contents}</div>

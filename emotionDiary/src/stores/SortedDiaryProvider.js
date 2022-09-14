@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
 export const SortedDiaryContext = React.createContext();
 export const SortedDiaryDispatchContext = React.createContext();
@@ -15,6 +15,18 @@ const reducer = (state, action) => {
     case 'OLDEST': {
       return JSON.parse(JSON.stringify(state)).sort((a, b) => Number(a.date) - Number(b.date));
     }
+    case 'LATEST_ALL': {
+      return JSON.parse(JSON.stringify(action.data)).sort((a, b) => Number(b.date) - Number(a.date));
+    }
+    case 'OLDEST_ALL': {
+      return JSON.parse(JSON.stringify(action.data)).sort((a, b) => Number(a.date) - Number(b.date));
+    }
+    case 'GOOD': {
+      return JSON.parse(JSON.stringify(action.data)).filter(it => Number(it.emotion) <= 3);
+    }
+    case 'BAD': {
+      return JSON.parse(JSON.stringify(action.data)).filter(it => Number(it.emotion) > 3);
+    }
     default:
       return state;
   }
@@ -22,19 +34,43 @@ const reducer = (state, action) => {
 
 export default function SortedDiaryProvider({ children, curMonthDiaryList }) {
   const [data, dispatch] = useReducer(reducer, []);
+  const [latest, setLatest] = useState('LATEST');
 
   useEffect(() => {
     dispatch({ type: 'SET', data: curMonthDiaryList });
+    dispatch({ type: 'LATEST' });
   }, [curMonthDiaryList]);
 
   const sortLatest = useCallback(() => {
+    setLatest('LATEST');
     dispatch({ type: 'LATEST' });
-  }, []);
-  const sortOldest = useCallback(() => {
-    dispatch({ type: 'OLDEST' });
-  }, []);
+  }, [latest]);
 
-  const memoizedDispatches = useMemo(() => ({ sortOldest, sortLatest }), [sortOldest, sortLatest]);
+  const sortOldest = useCallback(() => {
+    setLatest('OLDEST');
+    dispatch({ type: 'OLDEST' });
+  }, [latest]);
+
+  const sortAll = useCallback(() => {
+    if (latest === 'LATEST') {
+      dispatch({ type: 'LATEST_ALL', data: curMonthDiaryList });
+    } else if (latest === 'OLDEST') {
+      dispatch({ type: 'OLDEST_ALL', data: curMonthDiaryList });
+    }
+  }, [latest, curMonthDiaryList]);
+
+  const sortGood = useCallback(() => {
+    dispatch({ type: 'GOOD', data: curMonthDiaryList });
+  }, [curMonthDiaryList]);
+
+  const sortBad = useCallback(() => {
+    dispatch({ type: 'BAD', data: curMonthDiaryList });
+  }, [curMonthDiaryList]);
+
+  const memoizedDispatches = useMemo(
+    () => ({ sortOldest, sortLatest, sortAll, sortGood, sortBad }),
+    [sortOldest, sortLatest, sortAll, sortGood, sortBad],
+  );
 
   return (
     <SortedDiaryContext.Provider value={data}>
