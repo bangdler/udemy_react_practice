@@ -25,7 +25,7 @@ export default function ControlMenu({ initialSelectedValue, OptionList }) {
   };
 
   return (
-    <select value={selectValue} onChange={handleChange}>
+    <select className="ControlMenu" value={selectValue} onChange={handleChange}>
       {OptionList.map((it, idx) => (
         <option key={idx} value={it.value}>
           {it.name}
