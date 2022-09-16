@@ -27,9 +27,9 @@ export default function DiaryDataProvider({ children }) {
 
   const getInitData = async () => {
     const rawData = await getData('https://jsonplaceholder.typicode.com/comments');
-    const initData = rawData.slice(0, 3).map((it, idx) => ({
+    const initData = rawData.slice(0, 5).map((it, idx) => ({
       contents: it.body,
-      emotion: 3 + idx,
+      emotion: 1 + idx,
       date: new Date().getTime() + idx,
       id: idx + 1,
     }));
