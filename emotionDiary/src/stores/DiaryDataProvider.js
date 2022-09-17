@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useReducer, useEffect } from 'react';
+import React, { useCallback, useMemo, useReducer, useEffect, useRef } from 'react';
 import { getData } from 'utils/api';
 import { getItem, setItem } from 'utils/localStorage';
 import { STORAGE_KEY } from 'utils/constants';
@@ -24,6 +24,7 @@ const reducer = (state, action) => {
 export default function DiaryDataProvider({ children }) {
   const localStorageData = getItem(STORAGE_KEY);
   const [data, dispatch] = useReducer(reducer, []);
+  const dataId = useRef(new Date().getTime());
 
   const getInitData = async () => {
     const rawData = await getData('https://jsonplaceholder.typicode.com/comments');
@@ -46,16 +47,16 @@ export default function DiaryDataProvider({ children }) {
   }, [data]);
 
   const onCreate = useCallback(({ date, contents, emotion }) => {
-    const curTime = new Date(date).getTime();
     dispatch({
       type: 'CREATE',
       data: {
-        id: curTime,
-        date: curTime,
+        id: dataId.current,
+        date: new Date(date).getTime(),
         contents,
         emotion,
       },
     });
+    dataId.current += 1;
   }, []);
 
   const onRemove = useCallback(targetId => {
