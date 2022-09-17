@@ -9,7 +9,7 @@ export default function PageRouter({ children }) {
         <Route path="/" element={<Home />} />
         <Route path="/diary/:id" element={<Diary />} />
         <Route path="/new" element={<New />} />
-        <Route path="/edit" element={<Edit />} />
+        <Route path="/edit/:id" element={<Edit />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,9 +1,9 @@
-import MyHeader from 'components/MyHeader';
-import MyButton from 'components/MyButton';
 import { useContext, useEffect, useState } from 'react';
 import { DiaryDataContext } from 'stores/DiaryDataProvider';
-import DiaryList from '../components/DiaryList';
-import SortedDiaryProvider from '../stores/SortedDiaryProvider';
+import SortedDiaryProvider from 'stores/SortedDiaryProvider';
+import MyHeader from 'components/MyHeader';
+import MyButton from 'components/MyButton';
+import DiaryList from 'components/DiaryList';
 
 export default function Home() {
   const diaryList = useContext(DiaryDataContext);

@@ -72,6 +72,7 @@ export default function DiaryDataProvider({ children }) {
         contents,
         emotion,
       },
+      targetId,
     });
   }, []);
 
