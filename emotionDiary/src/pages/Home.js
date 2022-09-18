@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     if (!diaryList.length) return;
     const firstDayOfCurMonth = new Date(curDate.getFullYear(), curDate.getMonth(), 1).getTime();
-    const lastDayOfCurMonth = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0).getTime();
+    const lastDayOfCurMonth = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0, 23, 59, 59).getTime();
     setCurMonthDiaryList(diaryList.filter(it => firstDayOfCurMonth <= it.date && it.date <= lastDayOfCurMonth));
   }, [curDate, diaryList]);
 
