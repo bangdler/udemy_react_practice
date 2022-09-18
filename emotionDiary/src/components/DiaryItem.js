@@ -18,7 +18,7 @@ export default function DiaryItem({ id, contents, emotion, date }) {
         <div className="diary_contents_preview">{contents}</div>
       </div>
       <div className="button_wrapper">
-        <MyButton onClick={goEdit} text="수정하기" />
+        <MyButton onClick={goEdit} text="수정/삭제" />
       </div>
     </div>
   );

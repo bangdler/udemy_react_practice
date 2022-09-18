@@ -33,7 +33,7 @@ export default function DiaryEditor({ isEdit, originData }) {
 
   useEffect(() => {
     if (!isEdit) return;
-    setDate(getStringDate(new Date(Number(originData.date))));
+    setDate(getStringDate(new Date(originData.date)));
     setEmotion(originData.emotion);
     setContents(originData.contents);
   }, [isEdit, originData]);
@@ -73,7 +73,7 @@ export default function DiaryEditor({ isEdit, originData }) {
       <section>
         <div className="control_box">
           <MyButton text={'취소하기'} onClick={() => navigate(-1)} />
-          <MyButton text={'작성완료'} type={'positive'} onClick={handleSubmit} />
+          <MyButton text={isEdit ? '수정완료' : '작성완료'} type={'positive'} onClick={handleSubmit} />
         </div>
       </section>
     </div>

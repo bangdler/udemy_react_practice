@@ -59,7 +59,7 @@ export default function DiaryDataProvider({ children }) {
     dataId.current += 1;
   }, []);
 
-  const onRemove = useCallback(targetId => {
+  const onRemove = useCallback(({ targetId }) => {
     dispatch({ type: 'REMOVE', targetId });
   }, []);
 
