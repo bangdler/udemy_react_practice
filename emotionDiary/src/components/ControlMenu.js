@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { SortedDiaryDispatchContext } from 'stores/SortedDiaryProvider';
 
-export default function ControlMenu({ initialSelectedValue, OptionList }) {
+export default React.memo(function ControlMenu({ initialSelectedValue, OptionList }) {
   const [selectValue, setSelectValue] = useState(initialSelectedValue);
   const { sortLatest, sortOldest, sortAll, sortGood, sortBad } = useContext(SortedDiaryDispatchContext);
 
@@ -33,4 +33,4 @@ export default function ControlMenu({ initialSelectedValue, OptionList }) {
       ))}
     </select>
   );
-}
+});

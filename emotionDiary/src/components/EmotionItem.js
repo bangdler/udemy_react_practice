@@ -1,4 +1,6 @@
-export default function EmotionItem({ emotion_id, emotion_description, emotion_img, onClick, isSelected }) {
+import React from 'react';
+
+export default React.memo(function EmotionItem({ emotion_id, emotion_description, emotion_img, onClick, isSelected }) {
   return (
     <div
       className={['EmotionItem', isSelected ? `EmotionItem_on_${emotion_id}` : 'EmotionItem_off'].join(' ')}
@@ -8,4 +10,4 @@ export default function EmotionItem({ emotion_id, emotion_description, emotion_i
       <span>{emotion_description}</span>
     </div>
   );
-}
+});

@@ -38,18 +38,19 @@ export default function SortedDiaryProvider({ children, curMonthDiaryList }) {
 
   useEffect(() => {
     dispatch({ type: 'SET', data: curMonthDiaryList });
+    if (!curMonthDiaryList) return;
     dispatch({ type: 'LATEST' });
   }, [curMonthDiaryList]);
 
   const sortLatest = useCallback(() => {
     setLatest('LATEST');
     dispatch({ type: 'LATEST' });
-  }, [latest]);
+  }, []);
 
   const sortOldest = useCallback(() => {
     setLatest('OLDEST');
     dispatch({ type: 'OLDEST' });
-  }, [latest]);
+  }, []);
 
   const sortAll = useCallback(() => {
     if (latest === 'LATEST') {
@@ -57,7 +58,7 @@ export default function SortedDiaryProvider({ children, curMonthDiaryList }) {
     } else if (latest === 'OLDEST') {
       dispatch({ type: 'OLDEST_ALL', data: curMonthDiaryList });
     }
-  }, [latest, curMonthDiaryList]);
+  }, [curMonthDiaryList]);
 
   const sortGood = useCallback(() => {
     dispatch({ type: 'GOOD', data: curMonthDiaryList });

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DiaryDispatchContext } from 'stores/DiaryDataProvider';
 import { getStringDate } from 'utils/diaryUtill';
@@ -16,7 +16,7 @@ export default function DiaryEditor({ isEdit, originData }) {
 
   const handleChangeDate = ({ target }) => setDate(target.value);
 
-  const handleClickEmotion = emotion => setEmotion(emotion);
+  const handleClickEmotion = useCallback(emotion => setEmotion(emotion), []);
 
   const handleChangeContents = ({ target }) => setContents(target.value);
 
