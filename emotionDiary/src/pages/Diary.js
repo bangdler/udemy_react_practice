@@ -12,6 +12,15 @@ export default function Diary() {
   const diaryList = useContext(DiaryDataContext);
   const [data, setData] = useState();
 
+  const curEmotion = data ? EMOTION_LIST.find(it => Number(it.emotion_id) === Number(data.emotion)) : null;
+  const curStringDate = data ? getStringDate(new Date(data.date)) : null;
+
+  useEffect(() => {
+    if (!data) return;
+    const $title = document.getElementsByTagName('title')[0];
+    $title.innerHTML = `감정 일기장 ${curStringDate.slice(5)} 일기`;
+  }, [data]);
+
   useEffect(() => {
     if (!diaryList.length) return navigate('/', { replace: true });
     const targetDiary = diaryList.find(it => Number(it.id) === Number(id));
@@ -19,12 +28,10 @@ export default function Diary() {
     setData(targetDiary);
   }, [id, diaryList]);
 
-  const curEmotion = data ? EMOTION_LIST.find(it => Number(it.emotion_id) === Number(data.id)) : false;
-
   return data ? (
     <div className="DiaryPage">
       <MyHeader
-        headText={`${getStringDate(new Date(data.date))} 일기`}
+        headText={`${curStringDate} 일기`}
         leftChild={<MyButton text={'< 뒤로가기'} onClick={() => navigate(-1)} />}
         rightChild={<MyButton text={'수정하기'} onClick={() => navigate(`/edit/${data.id}`)} />}
       />

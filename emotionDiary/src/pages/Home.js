@@ -11,6 +11,11 @@ export default function Home() {
   const [curMonthDiaryList, setCurMonthDiaryList] = useState([]);
 
   useEffect(() => {
+    const $title = document.getElementsByTagName('title')[0];
+    $title.innerHTML = '감정 일기장';
+  }, []);
+
+  useEffect(() => {
     if (!diaryList.length) return;
     const firstDayOfCurMonth = new Date(curDate.getFullYear(), curDate.getMonth(), 1).getTime();
     const lastDayOfCurMonth = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0, 23, 59, 59).getTime();

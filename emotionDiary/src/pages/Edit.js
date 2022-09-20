@@ -13,6 +13,11 @@ export default function Edit() {
   const [originData, setOriginData] = useState();
 
   useEffect(() => {
+    const $title = document.getElementsByTagName('title')[0];
+    $title.innerHTML = '감정 일기장 - 수정하기';
+  }, []);
+
+  useEffect(() => {
     if (!diaryList.length) return navigate('/', { replace: true });
     const targetDiary = diaryList.find(it => Number(it.id) === Number(id));
     if (!targetDiary) return navigate('/', { replace: true });
